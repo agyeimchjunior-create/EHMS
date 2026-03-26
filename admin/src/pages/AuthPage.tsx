@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '../supabaseClient';
 import { motion } from 'framer-motion';
-import { Mail, Lock, ShieldAlert, Activity, ArrowRight, KeyRound, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, Activity, ArrowRight, KeyRound, Eye, EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -10,13 +10,11 @@ const AuthPage = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
 
     try {
       // 1. Check Dev Fallback (.env)
@@ -41,7 +39,6 @@ const AuthPage = () => {
       toast.success('Login Successful');
       navigate('/');
     } catch (err: any) {
-      setError(err.message);
       toast.error('Authentication Declined', { description: err.message });
     } finally {
       setLoading(false);

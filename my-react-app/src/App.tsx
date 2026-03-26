@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Toaster } from 'sonner';
-import { Home, PhoneCall, Building2, Car, Pill, User as UserIcon, Info, Activity } from 'lucide-react';
+import { Home, PhoneCall, Building2, Car, Pill, Info, Activity } from 'lucide-react';
 import LandingPage from './pages/LandingPage';
 import AboutPage from './pages/AboutPage';
 import ProfilePage from './pages/ProfilePage';

@@ -1,4 +1,4 @@
-import { Users, UserCheck, ShieldCheck, Mail, Phone, Calendar, CreditCard, Search, Filter, Loader2 } from 'lucide-react';
+import { Users, UserCheck, ShieldCheck, Mail, Phone, Calendar, CreditCard, Search, Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { supabase } from '../supabaseClient';
 

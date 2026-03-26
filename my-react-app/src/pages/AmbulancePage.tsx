@@ -1,4 +1,4 @@
-import { Car, MapPin, Truck, Phone, ChevronRight, Activity, ShieldCheck, HeartPulse, Clock, Search } from 'lucide-react';
+import { Car, MapPin, Truck, ChevronRight, ShieldCheck, HeartPulse, Search } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const AmbulancePage = () => {

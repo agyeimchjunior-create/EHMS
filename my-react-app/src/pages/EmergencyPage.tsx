@@ -1,4 +1,4 @@
-import { PhoneCall, MapPin, ShieldAlert, Heart, Clock, Activity, Loader2, Radar, Building2, Car, Pill, UserPlus, MessageCircle, Video, ShieldCheck, ChevronRight } from 'lucide-react';
+import { PhoneCall, ShieldAlert, Activity, Radar, Building2, Car, Pill, UserPlus, Video, ShieldCheck, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -7,12 +7,10 @@ const EmergencyPage = () => {
    const [isScanning, setIsScanning] = useState(false);
    const [showResults, setShowResults] = useState(false);
    const [currentLocation, setCurrentLocation] = useState<{ lat: number; lng: number } | null>(null);
-   const [watchId, setWatchId] = useState<number | null>(null);
    const [scanProgress, setScanProgress] = useState(0);
 
    const stopScanning = (id: number) => {
       navigator.geolocation.clearWatch(id);
-      setWatchId(null);
       setIsScanning(false);
       setShowResults(true);
       setScanProgress(100);
@@ -50,8 +48,6 @@ const EmergencyPage = () => {
             timeout: 10000
          }
       );
-
-      setWatchId(id);
 
       // Auto-complete the "Discovery" after data is gathered
       setTimeout(() => {

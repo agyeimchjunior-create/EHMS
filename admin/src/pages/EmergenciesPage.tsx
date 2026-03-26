@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { ShieldAlert, MapPin, Phone, Hospital, Truck, CheckCircle2, Search, Filter } from 'lucide-react';
+import { MapPin, Search, Filter } from 'lucide-react';
 
 const mockEmergencies = [
   { id: 'E-1234', type: 'Cardiac Arrest', location: 'Osu, Accra', priority: 'Critical', status: 'In Transit', timeReceived: '5 mins ago', responder: 'Ambulance #42' },
@@ -10,7 +9,6 @@ const mockEmergencies = [
 ];
 
 const EmergenciesPage = () => {
-  const [filter, setFilter] = useState('All');
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">

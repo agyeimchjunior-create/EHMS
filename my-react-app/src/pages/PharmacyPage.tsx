@@ -1,4 +1,4 @@
-import { Pill, Search, MapPin, Truck, Phone, Star, ShieldCheck, HeartPulse, ExternalLink, Clock } from 'lucide-react';
+import { Pill, Search, MapPin, Truck, Phone, Star, ShieldCheck, HeartPulse, ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const PharmacyPage = () => {

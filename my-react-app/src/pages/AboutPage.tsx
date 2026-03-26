@@ -1,4 +1,4 @@
-import { Target, Wallet, Handshake, Pill, Activity } from 'lucide-react';
+import { Target, Handshake } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { supabase } from '../supabaseClient';

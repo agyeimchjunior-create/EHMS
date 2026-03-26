@@ -1,4 +1,4 @@
-import { FileText, CheckCircle2, XCircle, Clock, Building2, Mail, Phone, ExternalLink, ShieldCheck, Loader2 } from 'lucide-react';
+import { FileText, CheckCircle2, Clock, Building2, Mail, Phone, ShieldCheck, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { supabase } from '../supabaseClient';

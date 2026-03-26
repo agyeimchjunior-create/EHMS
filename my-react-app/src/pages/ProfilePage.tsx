@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { User, Mail, Phone, Calendar, ShieldCheck, LogOut, HeartPulse, Activity } from 'lucide-react';
+import { Mail, Phone, Calendar, ShieldCheck, LogOut, HeartPulse, Activity } from 'lucide-react';
 
 const ProfilePage = () => {
   const [user, setUser] = useState<any>(null);
