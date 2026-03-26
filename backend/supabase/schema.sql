@@ -114,6 +114,28 @@ CREATE TABLE pharmacy_inventory (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- PARTNER APPLICATIONS
+CREATE TABLE partner_applications (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  phone VARCHAR(20),
+  type VARCHAR(50) NOT NULL,
+  status VARCHAR(20) DEFAULT 'Pending',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- PARTNERS
+CREATE TABLE partners (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  type VARCHAR(50) NOT NULL,
+  secret_id VARCHAR(50) UNIQUE NOT NULL,
+  is_active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- INDEXES for geolocation queries (PostGIS is recommended, but using B-Tree for simple numeric bounding box queries if not available)
 CREATE INDEX idx_hospital_location ON hospitals(latitude, longitude);
 CREATE INDEX idx_ambulance_location ON ambulance_locations(latitude, longitude);

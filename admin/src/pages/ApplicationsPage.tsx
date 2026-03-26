@@ -50,10 +50,11 @@ const ApplicationsPage = () => {
   const handleApprove = async (app: any) => {
     setApprovingId(app.id);
     try {
-      // 1. Generate Secret ID based on type
+      // 1. Generate Credentials
       const prefix = app.type.substring(0, 4).toUpperCase();
       const randomPart = Math.random().toString(36).substring(2, 7).toUpperCase();
       const secretId = `${prefix}-${randomPart}`;
+      const tempPassword = Math.random().toString(36).substring(2, 10); // Generate a random 8-char password
 
       // 2. Insert into 'partners' table
       const { error: partnerError } = await supabase
@@ -63,6 +64,7 @@ const ApplicationsPage = () => {
           email: app.email, 
           type: app.type.toLowerCase(), 
           secret_id: secretId,
+          password: tempPassword,
           is_active: true 
         }]);
 
@@ -77,7 +79,16 @@ const ApplicationsPage = () => {
       if (updateError) throw updateError;
 
       toast.success('Facility Approved!', {
-        description: `Secret ID generated: ${secretId}. Credentials sent to ${app.email}`
+        description: `Credentials for ${app.name} are ready.`,
+        action: {
+          label: 'Copy Credentials',
+          onClick: () => {
+            const credentials = `Email: ${app.email}\nPassword: ${tempPassword}\nSecret ID: ${secretId}`;
+            navigator.clipboard.writeText(credentials);
+            toast.success('Credentials copied to clipboard!');
+          }
+        },
+        duration: 20000,
       });
       fetchApplications();
     } catch (err: any) {
