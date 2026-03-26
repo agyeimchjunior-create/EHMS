@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Link, useLocation, Navigate, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Users, Activity, Settings, CalendarRange, MapPin, Car, Pill, Bike, ShoppingBag } from 'lucide-react';
+import { LayoutDashboard, Users, Activity, Settings, CalendarRange, MapPin, Car, Pill, Bike, ShoppingBag, Menu, X } from 'lucide-react';
 import HospitalDashboard from './pages/HospitalDashboard';
 import AmbulanceDashboard from './pages/AmbulanceDashboard';
 import PharmacyDashboard from './pages/PharmacyDashboard';
@@ -75,13 +75,16 @@ function Sidebar({ isOpen, setIsOpen, session }: { isOpen: boolean, setIsOpen: (
       )}
       
       <aside className={`w-64 bg-emerald-900 text-emerald-100 min-h-screen fixed left-0 top-0 z-50 transition-transform duration-300 lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="h-20 flex flex-col justify-center px-6 border-b border-emerald-800 bg-emerald-950">
+        <div className="h-20 flex flex-col justify-center px-6 border-b border-emerald-800 bg-emerald-950 relative">
           <span className="font-black text-xl text-white tracking-widest flex items-center gap-2 uppercase italic">
             <span className="text-blue-400">E</span>
             <span className="text-red-400">HM</span>
             <span className="text-blue-400">S</span>
           </span>
           <span className="text-xs text-emerald-300 font-bold uppercase mt-1 tracking-wider italic opacity-80">Partner Portal</span>
+          <button onClick={() => setIsOpen(false)} className="lg:hidden absolute right-4 top-1/2 -translate-y-1/2 text-emerald-500 hover:text-white transition">
+            <X size={24} />
+          </button>
         </div>
         <nav className="p-4 space-y-2 mt-4">
           {navItems.map((item) => (
@@ -207,7 +210,7 @@ function AppContent() {
               onClick={() => setSidebarOpen(true)}
               className="lg:hidden p-2 text-slate-500 hover:bg-slate-100 rounded-xl transition"
             >
-              <Activity size={24} />
+              <Menu size={24} />
             </button>
 
             <div className="flex-1 min-w-0">
