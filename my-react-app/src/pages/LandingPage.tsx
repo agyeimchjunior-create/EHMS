@@ -44,69 +44,138 @@ const LandingPage = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Hero Section */}
-      <section className="bg-blue-900 text-white min-h-[75vh] flex items-center pt-24 pb-20 sm:pt-32 sm:pb-24 mb-16 shadow-2xl overflow-hidden relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="flex flex-col lg:flex-row items-center gap-12">
-            
-            {/* Left 50% Text */}
-            <div className="lg:w-1/2 text-center lg:text-left z-10 flex flex-col items-center lg:items-start w-full">
-              <div className="grid w-full">
-                {heroSlides.map((slide, index) => (
-                  <div 
-                    key={index}
-                    className={`col-start-1 row-start-1 transition-all duration-1000 ease-out transform ${
-                      index === currentSlide 
-                        ? 'translate-x-0 opacity-100' 
-                        : '-translate-x-8 opacity-0 pointer-events-none'
-                    }`}
-                  >
-                    <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight mb-6 leading-tight">
-                      {slide.title}
-                    </h1>
-                    <p className="max-w-xl text-2xl sm:text-3xl text-emerald-300 font-bold mb-8 mx-auto lg:mx-0">
-                      {slide.subtitle}
-                    </p>
-                  </div>
-                ))}
-              </div>
-              <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center mt-2 w-full">
-                <Link to="/emergency" className="bg-red-600 hover:bg-red-500 text-white font-bold text-lg py-4 px-10 rounded-full shadow-lg hover:shadow-red-500/30 transition-all flex items-center gap-2 animate-pulse w-full sm:w-auto justify-center">
-                  <PhoneCall size={24} /> Emergency Portal
-                </Link>
-                <div className="flex gap-4 w-full sm:w-auto justify-center">
-                  <Link to="/about" className="bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/40 text-white font-bold py-3 px-6 rounded-full transition-all flex items-center gap-2 shadow-lg whitespace-nowrap">
-                    Partner <ArrowRight size={18} />
-                  </Link>
-                  <Link to="/donate" className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-full transition-all flex items-center gap-2 shadow-lg whitespace-nowrap">
-                    Support <HeartHandshake size={18} />
-                  </Link>
+      {/* ── Hero Section ── */}
+      <section className="text-white overflow-hidden relative">
+
+        {/* ── MOBILE: full-width background image with overlay ── */}
+        <div className="lg:hidden relative min-h-[90vh] flex items-center justify-center">
+          {/* Background images */}
+          {heroSlides.map((slide, index) => (
+            <div
+              key={index}
+              className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 ease-in-out ${
+                index === currentSlide ? 'opacity-100' : 'opacity-0'
+              }`}
+              style={{ backgroundImage: `url(${slide.image})` }}
+            />
+          ))}
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-950/80 via-blue-900/65 to-slate-950/90" />
+
+          {/* Mobile Text + Buttons */}
+          <div className="relative z-10 px-6 text-center flex flex-col items-center w-full max-w-2xl mx-auto pt-10 pb-20">
+            <div className="relative w-full mb-8 min-h-[220px] flex items-center justify-center">
+              {heroSlides.map((slide, index) => (
+                <div
+                  key={index}
+                  className={`transition-all duration-1000 ease-out ${
+                    index === currentSlide
+                      ? 'opacity-100 translate-y-0'
+                      : 'opacity-0 translate-y-4 absolute inset-0 pointer-events-none'
+                  } flex flex-col items-center justify-center`}
+                >
+                  <h1 className="text-4xl sm:text-5xl font-black tracking-tight leading-tight mb-4 drop-shadow-2xl">
+                    {slide.title}
+                  </h1>
+                  <p className="text-lg sm:text-xl text-blue-100 font-bold drop-shadow-lg">
+                    {slide.subtitle}
+                  </p>
                 </div>
+              ))}
+            </div>
+            <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-3 w-full justify-center">
+              <Link to="/emergencies" className="bg-red-600 hover:bg-red-500 text-white font-bold text-base py-4 px-8 rounded-full shadow-2xl shadow-red-600/30 transition-all flex items-center justify-center gap-2 animate-pulse">
+                <PhoneCall size={22} /> Emergency Portal
+              </Link>
+              <div className="flex gap-3 justify-center">
+                <Link to="/about" className="bg-white/15 hover:bg-white/25 backdrop-blur border border-white/30 text-white font-bold py-3 px-5 rounded-full transition-all flex items-center gap-2 shadow-lg whitespace-nowrap">
+                  Partner <ArrowRight size={16} />
+                </Link>
+                <Link to="/donate" className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-5 rounded-full transition-all flex items-center gap-2 shadow-lg whitespace-nowrap">
+                  Support <HeartHandshake size={16} />
+                </Link>
               </div>
             </div>
-
-            {/* Right 50% Slider Image */}
-            <div className="lg:w-1/2 w-full h-[400px] lg:h-[600px] relative overflow-hidden rounded-3xl shadow-2xl bg-slate-800">
-              {heroSlides.map((slide, index) => (
-                <img
-                  key={index}
-                  src={slide.image}
-                  alt="EHMS Hero Slider"
-                  className={`absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-out transform ${
-                    index === currentSlide 
-                      ? 'translate-x-0 opacity-100 scale-100' 
-                      : 'translate-x-[100%] opacity-0 scale-95'
+            {/* Slide dots */}
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+              {heroSlides.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrentSlide(i)}
+                  className={`rounded-full transition-all duration-300 ${
+                    i === currentSlide ? 'w-7 h-2 bg-white' : 'w-2 h-2 bg-white/40'
                   }`}
                 />
               ))}
             </div>
-
           </div>
         </div>
+
+        {/* ── DESKTOP: original split layout (text left | image right) ── */}
+        <div className="hidden lg:block bg-blue-900 min-h-[75vh] pt-20 pb-16 shadow-2xl mb-16">
+          <div className="max-w-7xl mx-auto px-8 w-full">
+            <div className="flex flex-row items-center gap-12">
+
+              {/* Left: Text */}
+              <div className="w-1/2 text-left z-10 flex flex-col items-start">
+                <div className="grid w-full">
+                  {heroSlides.map((slide, index) => (
+                    <div
+                      key={index}
+                      className={`col-start-1 row-start-1 transition-all duration-1000 ease-out transform ${
+                        index === currentSlide
+                          ? 'translate-x-0 opacity-100'
+                          : '-translate-x-8 opacity-0 pointer-events-none'
+                      }`}
+                    >
+                      <h1 className="text-6xl lg:text-7xl font-black tracking-tight mb-6 leading-tight">
+                        {slide.title}
+                      </h1>
+                      <p className="max-w-xl text-2xl text-emerald-300 font-bold mb-8">
+                        {slide.subtitle}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+                <div ref={buttonsRef} className="flex flex-row gap-4 items-center">
+                  <Link to="/emergencies" className="bg-red-600 hover:bg-red-500 text-white font-bold text-lg py-4 px-10 rounded-full shadow-lg hover:shadow-red-500/30 transition-all flex items-center gap-2 animate-pulse">
+                    <PhoneCall size={24} /> Emergency Portal
+                  </Link>
+                  <div className="flex gap-4">
+                    <Link to="/about" className="bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/40 text-white font-bold py-3 px-6 rounded-full transition-all flex items-center gap-2 shadow-lg whitespace-nowrap">
+                      Partner <ArrowRight size={18} />
+                    </Link>
+                    <Link to="/donate" className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-full transition-all flex items-center gap-2 shadow-lg whitespace-nowrap">
+                      Support <HeartHandshake size={18} />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right: Slider Image Card */}
+              <div className="w-1/2 h-[540px] relative overflow-hidden rounded-3xl shadow-2xl bg-slate-800">
+                {heroSlides.map((slide, index) => (
+                  <img
+                    key={index}
+                    src={slide.image}
+                    alt="EHMS Hero"
+                    className={`absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-out ${
+                      index === currentSlide
+                        ? 'translate-x-0 opacity-100 scale-100'
+                        : 'translate-x-[100%] opacity-0 scale-95'
+                    }`}
+                  />
+                ))}
+              </div>
+
+            </div>
+          </div>
+        </div>
+
       </section>
 
       {/* What We Do */}
-      <motion.section 
+      <motion.section
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
@@ -124,8 +193,8 @@ const LandingPage = () => {
             { icon: <Building2 size={32} className="text-emerald-600" />, title: 'Hospitals' },
             { icon: <Pill size={32} className="text-purple-600" />, title: 'Pharmacies' }
           ].map((item, i) => (
-            <motion.div 
-              key={i} 
+            <motion.div
+              key={i}
               whileHover={{ y: -5, scale: 1.02 }}
               className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center gap-4 transition duration-300"
             >
@@ -137,7 +206,7 @@ const LandingPage = () => {
       </motion.section>
 
       {/* The Challenge & Solution */}
-      <motion.section 
+      <motion.section
         initial={{ opacity: 0, scale: 0.95 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, amount: 0.2 }}
@@ -190,7 +259,7 @@ const LandingPage = () => {
       </motion.section>
 
       {/* Our Impact */}
-      <motion.section 
+      <motion.section
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.1 }}
@@ -209,8 +278,8 @@ const LandingPage = () => {
             { text: 'Financial protection for individuals and families', icon: <ShieldCheck size={40} className="text-emerald-600 mb-4" /> },
             { text: 'Strengthened national healthcare systems', icon: <Globe size={40} className="text-indigo-600 mb-4" /> }
           ].map((impact, i) => (
-            <motion.div 
-              key={i} 
+            <motion.div
+              key={i}
               variants={{
                 hidden: { opacity: 0, y: 30 },
                 visible: { opacity: 1, y: 0 }
@@ -224,7 +293,7 @@ const LandingPage = () => {
         </div>
 
         {/* CTA */}
-        <motion.div 
+        <motion.div
           whileInView={{ scale: [0.95, 1], opacity: [0, 1] }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: "easeOut" }}
