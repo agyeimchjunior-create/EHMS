@@ -1,7 +1,9 @@
 [build]
-  base    = "partner"
-  command = "npm run build"
+  command = "npm install && npm run build"
   publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
 
 [[headers]]
   for = "/*.js"
@@ -22,3 +24,4 @@
   from   = "/*"
   to     = "/index.html"
   status = 200
+
