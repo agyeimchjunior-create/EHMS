@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-500: #3b82f6; /* Blue for trust/health */
+  --color-primary-600: #2563eb;
+  --color-danger-500: #ef4444; /* Red for emergency */
+  --color-danger-600: #dc2626;
+  --color-dark: #1f2937;
+  --color-light: #f8fafc;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--color-light);
+  color: var(--color-dark);
+}

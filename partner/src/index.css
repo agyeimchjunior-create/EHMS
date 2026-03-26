@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-500: #059669; /* Emerald/Green for partners */
+  --color-primary-600: #047857;
+  --color-danger-500: #ef4444; 
+  --color-danger-600: #dc2626;
+  --color-dark: #111827;
+  --color-light: #f3f4f6;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--color-light);
+  color: var(--color-dark);
+}
