@@ -1,8 +1,54 @@
-import { Car, Activity, User, Fuel, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { useGeolocation } from '../hooks/useGeolocation';
+import { MapPin, Signal, Car, Activity, User, Fuel, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 const AmbulanceDashboard = () => {
+  const { location, error, loading } = useGeolocation();
+
   return (
-    <div className="space-y-8 max-w-7xl mx-auto">
+    <div className="space-y-8 max-w-7xl mx-auto pb-12 p-8 bg-blue-50/50 rounded-[3rem] min-h-screen">
+      
+      {/* Live Unit Tracking (NEW) */}
+      <div className="bg-slate-900 p-8 rounded-[2.5rem] shadow-2xl text-white relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+        <div className="absolute inset-0 bg-red-600 opacity-10 pointer-events-none">
+           <Signal className="absolute -right-10 -bottom-10 w-64 h-64 animate-pulse" />
+        </div>
+        
+        <div className="relative z-10 flex gap-6 items-center">
+           <div className="p-4 bg-red-600 rounded-3xl shadow-xl shadow-red-600/30">
+              <MapPin size={32} />
+           </div>
+           <div>
+              <h3 className="text-3xl font-black italic tracking-tighter">Live Dispatch Node</h3>
+              <p className="text-red-400 font-black uppercase text-[10px] tracking-[0.3em] flex items-center gap-2">
+                 <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span>
+                 Broadcasting Unit Coordinates
+              </p>
+           </div>
+        </div>
+
+        <div className="relative z-10 flex gap-4">
+           {loading ? (
+             <div className="flex items-center gap-3 px-6 py-4 bg-white/5 rounded-2xl border border-white/10 italic font-black text-xs text-slate-400">
+                Synchronizing Sattelites...
+             </div>
+           ) : error ? (
+             <div className="flex items-center gap-3 px-6 py-4 bg-red-500/10 rounded-2xl border border-red-500/20 italic font-black text-xs text-red-500">
+                GPS Failure: {error}
+             </div>
+           ) : (
+             <div className="flex gap-4">
+                <div className="px-6 py-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 text-center min-w-[120px]">
+                   <p className="text-[10px] font-black opacity-40 uppercase mb-1">LATITUDE</p>
+                   <p className="text-xl font-black italic tracking-tight">{location?.lat.toFixed(6)}</p>
+                </div>
+                <div className="px-6 py-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 text-center min-w-[120px]">
+                   <p className="text-[10px] font-black opacity-40 uppercase mb-1">LONGITUDE</p>
+                   <p className="text-xl font-black italic tracking-tight">{location?.lng.toFixed(6)}</p>
+                </div>
+             </div>
+           )}
+        </div>
+      </div>
       
       {/* Fleet Overview */}
       <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
