@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Toaster } from 'sonner';
-import { Home, PhoneCall, Building2, Car, Pill, Info, Activity } from 'lucide-react';
+import { Home, PhoneCall, Building2, Info, Activity, Grid } from 'lucide-react';
 import LandingPage from './pages/LandingPage';
 import AboutPage from './pages/AboutPage';
 import ProfilePage from './pages/ProfilePage';
@@ -10,6 +10,9 @@ import EmergencyPage from './pages/EmergencyPage';
 import HospitalsPage from './pages/HospitalsPage';
 import AmbulancePage from './pages/AmbulancePage';
 import PharmacyPage from './pages/PharmacyPage';
+import ServicesPage from './pages/ServicesPage';
+import CampaignDetailsPage from './pages/CampaignDetailsPage';
+import PartnerPage from './pages/PartnerPage';
 import { useEffect, useState } from 'react';
 import { supabase } from './supabaseClient';
 
@@ -34,25 +37,17 @@ function Navbar() {
   const navItems = [
     { name: 'Home', path: '/', icon: <Home size={20} /> },
     { name: 'Emergencies', path: '/emergencies', icon: <PhoneCall size={20} className="text-red-500 animate-pulse" />, color: 'text-red-600' },
-    { name: 'Hospitals', path: '/hospitals', icon: <Building2 size={20} /> },
-    { name: 'Ambulance', path: '/ambulance', icon: <Car size={20} /> },
-    { name: 'Pharmacy', path: '/pharmacy', icon: <Pill size={20} /> },
+    { name: 'Services', path: '/services', icon: <Grid size={20} /> },
     { name: 'About', path: '/about', icon: <Info size={20} /> },
+    { name: 'Partner', path: '/partner', icon: <Building2 size={20} /> },
   ];
 
   return (
     <nav className="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-slate-100">
       <div className="px-6 py-4 flex justify-between items-center">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 group">
-          <div className="bg-blue-600 p-1.5 rounded-lg group-hover:rotate-12 transition">
-            <Activity className="text-white" size={24} />
-          </div>
-          <span className="font-black text-2xl tracking-tighter uppercase italic flex">
-            <span className="text-blue-600">E</span>
-            <span className="text-red-600">HM</span>
-            <span className="text-blue-600">S</span>
-          </span>
+        <Link to="/" className="flex items-center gap-3 group">
+          <img src="/ehms logo.jpeg" alt="Health Direct Global Logo" className="h-[44px] group-hover:scale-105 transition-transform" />
         </Link>
 
         {/* Desktop Nav */}
@@ -147,11 +142,14 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/partner" element={<PartnerPage />} />
+            <Route path="/services" element={<ServicesPage />} />
             <Route path="/hospitals" element={<HospitalsPage />} />
             <Route path="/ambulance" element={<AmbulancePage />} />
             <Route path="/pharmacy" element={<PharmacyPage />} />
             <Route path="/emergencies" element={<EmergencyPage />} />
             <Route path="/donate" element={<DonatePage />} />
+            <Route path="/donate/:id" element={<CampaignDetailsPage />} />
             <Route path="/login" element={<AuthPage />} />
             <Route path="/profile" element={<ProfilePage />} />
           </Routes>
@@ -160,9 +158,9 @@ function App() {
         <footer className="bg-blue-900 text-blue-100 py-12 px-6">
           <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12">
             <div className="space-y-4">
-              <div className="flex items-center gap-2 group">
-                <div className="bg-white p-1 rounded-lg">
-                  <Activity className="text-blue-900" size={20} />
+              <div className="flex items-center gap-3">
+                <div className="bg-white p-2.5 rounded-2xl flex items-center justify-center">
+                  <img src="/ehms logo.jpeg" alt="Health Direct Global Logo" className="h-8" />
                 </div>
                 <span className="font-black text-xl text-white tracking-widest uppercase italic border-b border-white/20">EHMS PLATFORM</span>
               </div>

@@ -1,4 +1,4 @@
-import { Target, Handshake } from 'lucide-react';
+import { Target, Handshake, ShieldCheck, Activity, Mail, User, Phone, Check, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { supabase } from '../supabaseClient';
@@ -6,51 +6,66 @@ import { toast } from 'sonner';
 
 const AboutPage = () => {
   const [formData, setFormData] = useState({
+    name: '',
     email: '',
     phone: '',
-    name: '',
-    type: ''
+    amount: ''
   });
+  const [selectedTier, setSelectedTier] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const tiers = [
+    { label: 'GHS 25', value: 25 },
+    { label: 'GHS 100', value: 100 },
+    { label: 'GHS 500', value: 500 },
+    { label: 'GHS 1,000', value: 1000 },
+    { label: 'GHS 5,000', value: 5000 },
+  ];
+
+  const handleTierSelect = (val: number) => {
+    setSelectedTier(val.toString());
+    setFormData({ ...formData, amount: val.toString() });
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    if (name === 'amount') setSelectedTier(null);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.type || formData.type === 'Select your facility type') {
-      toast.error('Please select a service category');
+    if (!formData.name || !formData.email || !formData.phone || !formData.amount) {
+      toast.error('Required Fields Missing', { description: 'Please complete all sections of the contribution form.' });
       return;
     }
-    
+
     setLoading(true);
     try {
       const { error } = await supabase
-        .from('partner_applications')
+        .from('contributions')
         .insert([{
-          name: formData.name,
+          full_name: formData.name,
           email: formData.email,
           phone: formData.phone,
-          type: formData.type,
-          status: 'Pending'
+          amount: parseFloat(formData.amount),
+          tier: selectedTier ? `GHS ${selectedTier}` : 'Custom'
         }]);
 
       if (error) throw error;
 
-      toast.success('Application Submitted!', {
-        description: 'Our team will review your details and send your Secret ID once approved.'
-      });
-      setFormData({ email: '', phone: '', name: '', type: '' });
+      setSubmitted(true);
+      toast.success('Contribution Submitted!', { description: 'Thank you for your support. Our team will reach out shortly.' });
+      setFormData({ name: '', email: '', phone: '', amount: '' });
+      setSelectedTier(null);
     } catch (err: any) {
-      console.error('Detailed Submission Error:', err);
-      const errorMessage = err.message || 'Unknown protocol error';
-      const errorCode = err.code || 'NO_CODE';
-      
-      toast.error('Connection Diverted', {
-        description: `Error: ${errorMessage} (${errorCode}). Ensure your 'partner_applications' table is in the public schema.`
-      });
+      console.error(err);
+      toast.error('Submission Failed', { description: err.message || 'Could not connect to the database.' });
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <div className="flex flex-col min-h-screen">
       
@@ -124,94 +139,158 @@ const AboutPage = () => {
         </div>
       </section>
 
-      {/* Partner with Us Form */}
-      <section className="bg-slate-900 py-24 px-4 overflow-hidden relative font-sans">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl -mr-48 -mt-48"></div>
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center relative z-10">
-          <div>
-            <h2 className="text-4xl lg:text-5xl font-black text-white mb-8 tracking-tighter leading-tight italic">
-              Ready to <span className="text-blue-500">Join the Network?</span>
+      {/* Main Contribution Form Section */}
+      <section id="contribution-form" className="py-32 px-6 flex items-center justify-center bg-slate-50 overflow-hidden">
+        <div className="max-w-6xl w-full grid lg:grid-cols-2 gap-16 items-start">
+          
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            className="space-y-8"
+          >
+            <h2 className="text-4xl md:text-5xl font-black text-slate-900 italic uppercase tracking-tighter leading-none">
+              Become a <span className="text-blue-600">Strategic</span> Contributor
             </h2>
-            <p className="text-slate-400 text-lg mb-12 max-w-lg leading-relaxed font-medium">
-              We are expanding our ecosystem across the continent. If you represent a healthcare facility, emergency service, or logistics provider, let's collaborate to save more lives.
+            <p className="text-slate-500 text-lg font-medium italic leading-relaxed">
+              We are building a robust emergency response network. Your data and contribution help us track regional health support and optimize facility deployment.
             </p>
-            
-            <div className="space-y-6">
+
+            <div className="space-y-4">
               {[
-                { title: 'Instant Connectivity', desc: 'Sync your facility live with our national dispatch center.' },
-                { title: 'Global Standards', desc: 'Receive training and resources to meet international protocols.' }
-              ].map((benefit, i) => (
-                <div key={i} className="flex gap-4 items-start bg-slate-800/50 p-6 rounded-2xl border border-slate-700/50 backdrop-blur-sm">
-                   <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white shrink-0 font-bold">{i+1}</div>
-                   <div>
-                      <h4 className="text-white font-bold">{benefit.title}</h4>
-                      <p className="text-slate-500 text-sm mt-1">{benefit.desc}</p>
-                   </div>
+                { title: 'Project Transparency', icon: <ShieldCheck className="text-emerald-500" /> },
+                { title: 'Immediate Resource Allocation', icon: <Activity className="text-blue-500" /> },
+                { title: 'Community Feedback Loop', icon: <Mail className="text-purple-500" /> }
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-slate-200 shadow-sm">
+                  {item.icon}
+                  <span className="font-black text-slate-700 italic uppercase text-xs tracking-widest">{item.title}</span>
                 </div>
               ))}
             </div>
-          </div>
+          </motion.div>
 
-          <motion.div 
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="bg-white p-8 lg:p-12 rounded-[2.5rem] shadow-2xl shadow-blue-500/10"
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-[3.5rem] shadow-2xl p-10 border border-slate-200 relative overflow-hidden"
           >
-            <h3 className="text-2xl font-black text-slate-800 mb-8 italic">Partnership Application</h3>
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-xs font-black text-slate-400 uppercase ml-1">Work Email</label>
-                  <input 
-                    type="email" required placeholder="admin@hospital.com" 
-                    className="w-full bg-slate-50 border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none transition font-medium" 
-                    value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-black text-slate-400 uppercase ml-1">Contact Number</label>
-                  <input 
-                    type="tel" required placeholder="+233..." 
-                    className="w-full bg-slate-50 border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none transition font-medium" 
-                    value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-xs font-black text-slate-400 uppercase ml-1">Facility / Unit Name</label>
-                <input 
-                  type="text" required placeholder="St. Nicholas Hospital, Accra" 
-                  className="w-full bg-slate-50 border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none transition font-medium" 
-                  value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})}
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-xs font-black text-slate-400 uppercase ml-1">Service Category</label>
-                <select 
-                  required
-                  className="w-full bg-slate-50 border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none transition font-black text-slate-700"
-                  value={formData.type} onChange={(e) => setFormData({...formData, type: e.target.value})}
+             {submitted ? (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="py-20 text-center"
                 >
-                  <option>Select your facility type</option>
-                  <option value="hospital">Hospital / Medical Center</option>
-                  <option value="pharmacy">Pharmacy / Medical Supply</option>
-                  <option value="ambulance">Ambulance Service</option>
-                  <option value="rider">Emergency Rider (Logistics)</option>
-                </select>
-              </div>
+                   <div className="w-20 h-20 bg-emerald-500 text-white rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-emerald-500/20">
+                      <Check size={40} />
+                   </div>
+                   <h3 className="text-3xl font-black italic uppercase tracking-tighter text-slate-900 mb-4">Thank You!</h3>
+                   <p className="text-slate-500 font-medium italic mb-10">Your contribution record has been securely linked to the EHMS command center.</p>
+                   <button 
+                    onClick={() => setSubmitted(false)}
+                    className="text-blue-600 font-black uppercase text-xs tracking-widest italic border-b-2 border-blue-600 pb-1"
+                   >
+                    Submit Another Entry
+                   </button>
+                </motion.div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Full Name</label>
+                       <div className="relative">
+                          <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
+                          <input 
+                            name="name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            type="text" 
+                            placeholder="John Doe" 
+                            className="w-full bg-slate-50 border border-slate-200 p-4 pl-14 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 font-bold italic transition"
+                          />
+                       </div>
+                    </div>
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Phone Number</label>
+                       <div className="relative">
+                          <Phone className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
+                          <input 
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleInputChange}
+                            type="tel" 
+                            placeholder="+233 24 000 0000" 
+                            className="w-full bg-slate-50 border border-slate-200 p-4 pl-14 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 font-bold italic transition"
+                          />
+                       </div>
+                    </div>
+                  </div>
 
-              <div className="pt-4">
-                <button 
-                  type="submit" disabled={loading}
-                  className="w-full bg-blue-900 border-b-4 border-blue-950 text-white font-black py-5 rounded-2xl shadow-xl hover:bg-blue-800 transition active:border-b-0 active:translate-y-1 disabled:opacity-50"
-                >
-                  {loading ? 'Submitting Application...' : 'Submit Application'}
-                </button>
-              </div>
-            </form>
+                  <div className="space-y-2">
+                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
+                     <div className="relative">
+                        <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
+                        <input 
+                          name="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          type="email" 
+                          placeholder="john@example.com" 
+                          className="w-full bg-slate-50 border border-slate-200 p-4 pl-14 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 font-bold italic transition"
+                        />
+                     </div>
+                  </div>
+
+                  <div className="pt-6 border-t border-slate-100">
+                     <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-4 italic">Select Contribution Amount</h4>
+                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        {tiers.map((t) => (
+                           <button
+                             key={t.value}
+                             type="button"
+                             onClick={() => handleTierSelect(t.value)}
+                             className={`py-3 px-4 rounded-xl font-black text-[10px] tracking-tight transition uppercase italic border-2 ${
+                               formData.amount === t.value.toString()
+                                 ? 'bg-blue-600 border-blue-600 text-white shadow-lg' 
+                                 : 'bg-white border-slate-100 text-slate-600 hover:border-blue-200'
+                             }`}
+                           >
+                              {t.label}
+                           </button>
+                        ))}
+                     </div>
+                  </div>
+
+                  <div className="space-y-2">
+                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 italic">Or Enter Custom Amount (GHS)</label>
+                     <div className="relative">
+                        <span className="absolute left-6 top-1/2 -translate-y-1/2 font-black text-slate-400 italic">GHS</span>
+                        <input 
+                          name="amount"
+                          value={formData.amount}
+                          onChange={handleInputChange}
+                          type="number" 
+                          placeholder="0.00" 
+                          className="w-full bg-slate-50 border border-slate-200 pl-16 pr-6 py-5 rounded-[2rem] outline-none focus:ring-4 focus:ring-blue-500/10 font-black text-xl text-slate-800 italic transition" 
+                        />
+                     </div>
+                  </div>
+
+                  <button 
+                    disabled={loading}
+                    className="w-full bg-slate-950 text-white font-black py-5 rounded-[2rem] hover:bg-blue-600 transition shadow-xl uppercase text-sm tracking-[0.2em] italic border-b-4 border-slate-900 active:border-b-0 active:translate-y-1 flex items-center justify-center gap-3"
+                  >
+                    {loading ? (
+                      <><Loader2 className="animate-spin" size={20} /> Processing...</>
+                    ) : (
+                      'Initialize Contribution'
+                    )}
+                  </button>
+
+                  <p className="text-[8px] text-center text-slate-400 font-bold uppercase tracking-[0.3em] italic">
+                     Secure Point-to-Point Encryption Active
+                  </p>
+                </form>
+              )}
           </motion.div>
         </div>
       </section>

@@ -1,16 +1,43 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary-500: #3b82f6; /* Blue for trust/health */
-  --color-primary-600: #2563eb;
-  --color-danger-500: #ef4444; /* Red for emergency */
-  --color-danger-600: #dc2626;
-  --color-dark: #1f2937;
-  --color-light: #f8fafc;
+  /* ── Brand Colors (Based on Health Direct Global Logo) ── */
+  
+  /* Cyan (The Light Blue "H" Base) */
+  --color-cyan-400: #38caf1;
+  --color-cyan-500: #27bfea; 
+  --color-cyan-600: #1ba0cc;
+
+  /* Navy (The "Health Direct Global" Text) */
+  --color-slate-800: #132470;
+  --color-slate-900: #0f227b; 
+  --color-slate-950: #0a1c5d;
+
+  /* Inject Brand Colors into the Default Utility Classes Used in App */
+  --color-blue-50: #f0fbff;
+  --color-blue-100: #e0f6fe;
+  --color-blue-200: #baeafc;
+  --color-blue-300: #7dddf8;
+  --color-blue-400: #38caf1;
+  --color-blue-500: #27bfea; /* Logo Cyan */
+  --color-blue-600: #1ba0cc;
+  --color-blue-700: #132470; /* Transition to Navy */
+  --color-blue-800: #0f227b; /* Logo Navy */
+  --color-blue-900: #0a1c5d; /* Dark Logo Navy */
+  --color-blue-950: #050e38;
+
+  /* Logo Green (The Zig-Zag Line) */
+  --color-emerald-300: #6efa9f;
+  --color-emerald-400: #46e885;
+  --color-emerald-500: #27d872; /* Logo Green */
+  --color-emerald-600: #1ca653;
+  --color-emerald-700: #14803f;
+  --color-emerald-800: #0e5e2e;
+  --color-emerald-900: #08401f;
 }
 
 body {
   font-family: 'Inter', system-ui, sans-serif;
-  background-color: var(--color-light);
-  color: var(--color-dark);
+  background-color: #f8fafc;
+  color: #0f227b; /* Set standard text mapping to Logo Navy */
 }
